@@ -8,7 +8,6 @@ usuario = Namespace('usuario')
 listar_usuarios = Namespace('listar_usuarios')
 
 usuario_model = usuario.model('Usuario', {
-    'id': fields.Integer,
     'cpf': fields.String(required=True),
     'nome_cliente': fields.String(required=True),
     'data_nascimento': fields.String(required=True),

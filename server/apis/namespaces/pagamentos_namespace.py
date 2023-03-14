@@ -8,7 +8,6 @@ listar_pagamentos = Namespace('listar_pagamentos')
 pagamento = Namespace('pagamento')
 
 pagamento_model = pagamento.model('Pagamento', {
-    'id': fields.Integer(required=True),
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),

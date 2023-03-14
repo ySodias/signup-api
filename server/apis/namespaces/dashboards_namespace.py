@@ -1,14 +1,19 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import request
 
 from server import environment
 
 dashboards = Namespace('dashboards')
 
+dashboards_model_response = dashboards.model('Dashboards', {
+    'token': fields.String(required=True)
+})
+
 @dashboards.route('')
 class Dashboards(Resource):
 
     @dashboards.doc('get dashboards')
+    @dashboards.marshal_with(dashboards_model_response, 200)
     def post(self):
         url = environment.microsoft_url
         headers = {
