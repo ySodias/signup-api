@@ -15,7 +15,7 @@ class Environment:
         self._AZURE_USERNAME = os.getenv('AZURE_USERNAME')
         self._AZURE_PASSWORD = os.getenv('AZURE_PASSWORD')
         self._COOKIE = os.getenv('COOKIE')
-
+        self._SECRET_KEY = os.getenv('SECRET_KEY')
 
     @property
     def api_name(self) -> str:
@@ -58,3 +58,7 @@ class Environment:
     @property
     def cookie(self) -> str:
         return self._COOKIE
+
+    @property
+    def secret_key(self) -> str:
+        return self._SECRET_KEY

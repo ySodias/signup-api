@@ -31,9 +31,6 @@ def upgrade() -> None:
                     sa.Column('updated_by', sa.String(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
-    op.drop_table('tb_treino')
-    op.drop_table('tb_pagamento')
-    op.drop_table('tb_politicas_pagamentos')
     op.alter_column('tb_usuario', 'cpf',
                existing_type=sa.VARCHAR(),
                nullable=True)

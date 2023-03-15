@@ -1,11 +1,13 @@
 import datetime
-from sqlalchemy import DateTime, Boolean, Integer, String, ForeignKey
+from sqlalchemy import DateTime, Boolean, Integer, String
 from server import db
 class AdministradorModel(db.Model):
     __tablename__ = 'tb_administrador'
 
     id = db.Column(Integer, primary_key=True)
-    nome = db.Column(String, unique=True)
+    email = db.Column(String, unique=True)
+    nome = db.Column(String)
+    password = db.Column(String)
     data_nascimento = db.Column(String)
     endereco = db.Column(String)
     telefone = db.Column(String)

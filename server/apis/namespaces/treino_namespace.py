@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource, fields, reqparse
+from flask_restx import Namespace, Resource, fields, reqparse, abort
 
 from server import db
 from server.apis.models.treino_model import TreinoModel
@@ -33,6 +33,10 @@ treino_model_response = treino.model('TreinoResponse', {
     'updated_by': fields.String
 })
 
+error_fields = treino.model('Error', {
+    'message': fields.String()
+})
+
 parser = reqparse.RequestParser()
 parser.add_argument('cpf_usuario')
 
@@ -43,14 +47,16 @@ class Treino(Resource):
     @treino.param('cpf_usuario')
     @treino.expect(parser)
     @treino.marshal_with(treino_model_response, 200)
+    @treino.marshal_with(error_fields, mask=False, code=404, description='Not Found')
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
             data = db.session.query(TreinoModel).filter_by(**params)
         else:
-            data = db.session.query(TreinoModel).all()
-        response = ConverterData.converter_data_json(data=data[0])
-        return response
+            data = db.session.query(TreinoModel).one()
+        if data:
+            return ConverterData.converter_data_json(data=data)
+        return {'message': 'Cant find project'}, 404
 
     @treino.doc('post treino')
     @treino.expect(treino_model)

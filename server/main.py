@@ -9,8 +9,6 @@ from server.apis.namespaces.usuario_namespace import usuario, listar_usuarios
 from server import app, api_blueprint, api, environment, db
 
 
-
-
 class Main(Resource):
 
     def __init__(self):

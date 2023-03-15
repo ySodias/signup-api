@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
 from server.apis.models.usuario_model import UsuarioModel
+from server.core import autenticacao_core
 from server.utils.converter_data import ConverterData
 
 usuario = Namespace('usuario')
@@ -64,10 +65,12 @@ class Usuario(Resource):
         """
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(UsuarioModel).filter_by(**params)
+            usuarios = db.session.query(UsuarioModel).filter_by(**params)
         else:
-            data = db.session.query(UsuarioModel).all()
-        response = ConverterData.converter_data_json(data=data[0])
+            usuarios = db.session.query(UsuarioModel).all()
+        response = list()
+        for usuario in usuarios:
+            response.append(ConverterData.converter_data_json(data=usuario).copy())
         return response
 
     @usuario.doc('post usuario')
