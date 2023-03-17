@@ -55,7 +55,7 @@ class Pagamento(Resource):
         return response
 
     @pagamento.doc('post pagamentos')
-    @pagamento.expect(pagamento_model)
+    @pagamento.expect(pagamento_model, validate=True)
     @pagamento.marshal_with(pagamento_model_response, 201)
     def post(self):
         pagamento = PagamentoModel()
@@ -69,7 +69,7 @@ class Pagamento(Resource):
             return exception.args[0], 400
 
     @pagamento.doc('post pagamentos')
-    @pagamento.expect(pagamento_model)
+    @pagamento.expect(pagamento_model, validate=True)
     @pagamento.marshal_with(pagamento_model_response, 200)
     def put(self):
         try:

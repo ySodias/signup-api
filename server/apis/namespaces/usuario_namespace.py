@@ -35,6 +35,7 @@ usuario_model_response = usuario.model('UsuarioResponse', {
 })
 
 
+
 parser = reqparse.RequestParser()
 parser.add_argument('nome_cliente')
 parser.add_argument('cpf')
@@ -71,8 +72,8 @@ class Usuario(Resource):
         return response
 
     @usuario.doc('post usuario')
-    @usuario.expect(usuario_model)
-    @usuario.marshal_with(usuario_model_response, 201)
+    @usuario.expect(usuario_model, validate=True)
+    @usuario.marshal_with(usuario_model_response, code=201)
     def post(self):
         usuario = UsuarioModel()
         for key, value in self.api.payload.items():
@@ -85,7 +86,7 @@ class Usuario(Resource):
             return exception.args[0], 400
 
     @usuario.doc('put usuario')
-    @usuario.expect(usuario_model)
+    @usuario.expect(usuario_model, validate=True)
     @usuario.marshal_with(usuario_model_response, 200)
     def put(self):
         try:
@@ -97,7 +98,7 @@ class Usuario(Resource):
             return exception.args[0], 400
 
     @usuario.doc('delete usuario')
-    @usuario.expect(usuario_model)
+    @usuario.expect(usuario_model, validate=True)
     @usuario.marshal_with(usuario_model_response, 200)
     def delete(self):
         """

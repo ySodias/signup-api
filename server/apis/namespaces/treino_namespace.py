@@ -54,7 +54,7 @@ class Treino(Resource):
         return {'message': 'Cant find project'}, 404
 
     @treino.doc('post treino')
-    @treino.expect(treino_model)
+    @treino.expect(treino_model, validate=True)
     def post(self):
         treino = TreinoModel()
         for key, value in self.api.payload.items():
@@ -67,7 +67,7 @@ class Treino(Resource):
             return exception.args[0], 400
 
     @treino.doc('put treino')
-    @treino.expect(treino_model)
+    @treino.expect(treino_model, validate=True)
     def put(self):
         try:
             db.session.query(TreinoModel).filter(TreinoModel.id == self.api.payload.get('id')). \

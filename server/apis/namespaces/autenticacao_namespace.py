@@ -23,7 +23,7 @@ class Autenticacao(Resource):
 
     @autenticacao.doc('get autenticacao')
     @autenticacao.marshal_with(autenticacao_model_reponse, 200)
-    @autenticacao.expect(autenticacao_model)
+    @autenticacao.expect(autenticacao_model, validate=True)
     def post(self):
         try:
             administrador = AutenticacaoCore.get_administrador_por_usuario(autenticacao_model=self.api.payload)
