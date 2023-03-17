@@ -23,18 +23,14 @@ treino_model_response = treino.model('TreinoResponse', {
     'nome_exercicio': fields.String(required=True),
     'series': fields.Integer(required=True),
     'repeticoes': fields.Integer(required=True),
-    'data_fim': fields.String(required=True),
+    'data_fim': fields.DateTime(required=True),
     'modalidade': fields.Integer(required=True),
     'frequencia': fields.Integer(required=True),
     'carga': fields.Integer(required=True),
-    'created_at': fields.String,
-    'updated_at': fields.String,
+    'created_at': fields.DateTime,
+    'updated_at': fields.DateTime,
     'created_by': fields.String,
     'updated_by': fields.String
-})
-
-error_fields = treino.model('Error', {
-    'message': fields.String()
 })
 
 parser = reqparse.RequestParser()
@@ -47,7 +43,6 @@ class Treino(Resource):
     @treino.param('cpf_usuario')
     @treino.expect(parser)
     @treino.marshal_with(treino_model_response, 200)
-    @treino.marshal_with(error_fields, mask=False, code=404, description='Not Found')
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
@@ -60,7 +55,6 @@ class Treino(Resource):
 
     @treino.doc('post treino')
     @treino.expect(treino_model)
-    @treino.marshal_with(treino_model_response, 201)
     def post(self):
         treino = TreinoModel()
         for key, value in self.api.payload.items():
@@ -74,7 +68,6 @@ class Treino(Resource):
 
     @treino.doc('put treino')
     @treino.expect(treino_model)
-    @treino.marshal_with(treino_model_response, 200)
     def put(self):
         try:
             db.session.query(TreinoModel).filter(TreinoModel.id == self.api.payload.get('id')). \

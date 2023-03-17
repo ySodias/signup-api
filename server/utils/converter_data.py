@@ -8,7 +8,7 @@ class ConverterData:
         if data:
             json_response = {
                 key: value for key, value in data.__dict__.items()
-                if key != '_sa_instance_state' and key != 'updated_at' and key != 'created_at'
+                if key != '_sa_instance_state'
             }
             return json_response
         return dict()

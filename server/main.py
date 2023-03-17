@@ -7,6 +7,7 @@ from server.apis.namespaces.politica_pagamento_namespace import politica_pagamen
 from server.apis.namespaces.treino_namespace import treino
 from server.apis.namespaces.usuario_namespace import usuario, listar_usuarios
 from server import app, api_blueprint, api, environment, db
+from server.filter import before_request_func, after_request_func
 
 
 class Main(Resource):

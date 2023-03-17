@@ -2,7 +2,6 @@ from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
 from server.apis.models.usuario_model import UsuarioModel
-from server.core import autenticacao_core
 from server.utils.converter_data import ConverterData
 
 usuario = Namespace('usuario')
@@ -17,7 +16,6 @@ usuario_model = usuario.model('Usuario', {
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
     'plano': fields.Integer(required=True),
-    'tipo_usuario': fields.Integer(required=True)
 })
 
 usuario_model_response = usuario.model('UsuarioResponse', {
@@ -30,7 +28,6 @@ usuario_model_response = usuario.model('UsuarioResponse', {
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
     'plano': fields.Integer(required=True),
-    'tipo_usuario': fields.Integer(required=True),
     'created_at': fields.String,
     'updated_at': fields.String,
     'created_by': fields.String,

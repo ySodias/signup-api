@@ -11,14 +11,14 @@ class TreinoModel(db.Model):
     __tablename__ = 'tb_treino'
 
     id = db.Column(Integer, primary_key=True)
-    cpf_usuario = db.Column(String, ForeignKey(UsuarioModel.cpf))
-    nome_exercicio = db.Column(String)
-    series = db.Column(Integer)
-    repeticoes = db.Column(Integer)
-    data_fim = db.Column(String)
-    modalidade = db.Column(Integer, ForeignKey(DominioModel.id))
-    frequencia = db.Column(Integer)
-    carga = db.Column(Integer)
+    cpf_usuario = db.Column(String, ForeignKey(UsuarioModel.cpf), nullable=False)
+    nome_exercicio = db.Column(String, nullable=False)
+    series = db.Column(Integer, nullable=False)
+    repeticoes = db.Column(Integer, nullable=False)
+    data_fim = db.Column(String, nullable=False)
+    modalidade = db.Column(Integer, ForeignKey(DominioModel.id), nullable=False)
+    frequencia = db.Column(Integer, nullable=False)
+    carga = db.Column(Integer, nullable=False)
     created_at = db.Column(DateTime, default=datetime.datetime.utcnow())# data_inicio
     updated_at = db.Column(DateTime, default=datetime.datetime.utcnow())
     created_by = db.Column(String)
