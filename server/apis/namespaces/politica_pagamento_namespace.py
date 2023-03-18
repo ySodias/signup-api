@@ -43,7 +43,7 @@ class PoliticaPagamento(Resource):
 
 
     @politica_pagamento.doc('post politica_pagamento')
-    @politica_pagamento.expect(politica_pagamento_model)
+    @politica_pagamento.expect(politica_pagamento_model, validate=True)
     @politica_pagamento.marshal_with(politica_pagamento_model_response, 201)
     def post(self):
         politica_pagamento = PoliticasPagamentosModel()
@@ -57,7 +57,7 @@ class PoliticaPagamento(Resource):
             return exception.args[0], 400
 
     @politica_pagamento.doc('put politica_pagamento')
-    @politica_pagamento.expect(politica_pagamento_model)
+    @politica_pagamento.expect(politica_pagamento_model, validate=True)
     @politica_pagamento.marshal_with(politica_pagamento_model_response, 200)
     def put(self):
         try:
