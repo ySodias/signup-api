@@ -5,11 +5,13 @@ class ConverterData:
 
     @staticmethod
     def converter_data_json(data):
-        json_response = {
-            key: value for key, value in data.__dict__.items()
-            if key != '_sa_instance_state' and key != 'updated_at' and key != 'created_at'
-        }
-        return json_response
+        if data:
+            json_response = {
+                key: value for key, value in data.__dict__.items()
+                if key != '_sa_instance_state'
+            }
+            return json_response
+        return dict()
 
     @staticmethod
     def paginate_json(list_data: List, page: int = 1, size: int = 100) -> dict:

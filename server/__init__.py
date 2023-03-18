@@ -1,7 +1,6 @@
 from flask import Flask, Blueprint
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
-
 from server.settings.environment import Environment
 
 environment = Environment()

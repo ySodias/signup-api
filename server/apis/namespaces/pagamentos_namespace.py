@@ -8,7 +8,6 @@ listar_pagamentos = Namespace('listar_pagamentos')
 pagamento = Namespace('pagamento')
 
 pagamento_model = pagamento.model('Pagamento', {
-    'id': fields.Integer(required=True),
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),
@@ -56,7 +55,7 @@ class Pagamento(Resource):
         return response
 
     @pagamento.doc('post pagamentos')
-    @pagamento.expect(pagamento_model)
+    @pagamento.expect(pagamento_model, validate=True)
     @pagamento.marshal_with(pagamento_model_response, 201)
     def post(self):
         pagamento = PagamentoModel()
@@ -70,7 +69,7 @@ class Pagamento(Resource):
             return exception.args[0], 400
 
     @pagamento.doc('post pagamentos')
-    @pagamento.expect(pagamento_model)
+    @pagamento.expect(pagamento_model, validate=True)
     @pagamento.marshal_with(pagamento_model_response, 200)
     def put(self):
         try:

@@ -8,7 +8,6 @@ usuario = Namespace('usuario')
 listar_usuarios = Namespace('listar_usuarios')
 
 usuario_model = usuario.model('Usuario', {
-    'id': fields.Integer,
     'cpf': fields.String(required=True),
     'nome_cliente': fields.String(required=True),
     'data_nascimento': fields.String(required=True),
@@ -17,7 +16,6 @@ usuario_model = usuario.model('Usuario', {
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
     'plano': fields.Integer(required=True),
-    'tipo_usuario': fields.Integer(required=True)
 })
 
 usuario_model_response = usuario.model('UsuarioResponse', {
@@ -30,12 +28,12 @@ usuario_model_response = usuario.model('UsuarioResponse', {
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
     'plano': fields.Integer(required=True),
-    'tipo_usuario': fields.Integer(required=True),
     'created_at': fields.String,
     'updated_at': fields.String,
     'created_by': fields.String,
     'updated_by': fields.String
 })
+
 
 
 parser = reqparse.RequestParser()
@@ -65,15 +63,17 @@ class Usuario(Resource):
         """
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(UsuarioModel).filter_by(**params)
+            usuarios = db.session.query(UsuarioModel).filter_by(**params)
         else:
-            data = db.session.query(UsuarioModel).all()
-        response = ConverterData.converter_data_json(data=data[0])
+            usuarios = db.session.query(UsuarioModel).all()
+        response = list()
+        for usuario in usuarios:
+            response.append(ConverterData.converter_data_json(data=usuario).copy())
         return response
 
     @usuario.doc('post usuario')
-    @usuario.expect(usuario_model)
-    @usuario.marshal_with(usuario_model_response, 201)
+    @usuario.expect(usuario_model, validate=True)
+    @usuario.marshal_with(usuario_model_response, code=201)
     def post(self):
         usuario = UsuarioModel()
         for key, value in self.api.payload.items():
@@ -86,7 +86,7 @@ class Usuario(Resource):
             return exception.args[0], 400
 
     @usuario.doc('put usuario')
-    @usuario.expect(usuario_model)
+    @usuario.expect(usuario_model, validate=True)
     @usuario.marshal_with(usuario_model_response, 200)
     def put(self):
         try:
@@ -98,7 +98,7 @@ class Usuario(Resource):
             return exception.args[0], 400
 
     @usuario.doc('delete usuario')
-    @usuario.expect(usuario_model)
+    @usuario.expect(usuario_model, validate=True)
     @usuario.marshal_with(usuario_model_response, 200)
     def delete(self):
         """

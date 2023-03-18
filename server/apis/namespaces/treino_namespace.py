@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource, fields, reqparse
+from flask_restx import Namespace, Resource, fields, reqparse, abort
 
 from server import db
 from server.apis.models.treino_model import TreinoModel
@@ -23,12 +23,12 @@ treino_model_response = treino.model('TreinoResponse', {
     'nome_exercicio': fields.String(required=True),
     'series': fields.Integer(required=True),
     'repeticoes': fields.Integer(required=True),
-    'data_fim': fields.String(required=True),
+    'data_fim': fields.DateTime(required=True),
     'modalidade': fields.Integer(required=True),
     'frequencia': fields.Integer(required=True),
     'carga': fields.Integer(required=True),
-    'created_at': fields.String,
-    'updated_at': fields.String,
+    'created_at': fields.DateTime,
+    'updated_at': fields.DateTime,
     'created_by': fields.String,
     'updated_by': fields.String
 })
@@ -48,13 +48,13 @@ class Treino(Resource):
         if params:
             data = db.session.query(TreinoModel).filter_by(**params)
         else:
-            data = db.session.query(TreinoModel).all()
-        response = ConverterData.converter_data_json(data=data[0])
-        return response
+            data = db.session.query(TreinoModel).one()
+        if data:
+            return ConverterData.converter_data_json(data=data)
+        return {'message': 'Cant find project'}, 404
 
     @treino.doc('post treino')
-    @treino.expect(treino_model)
-    @treino.marshal_with(treino_model_response, 201)
+    @treino.expect(treino_model, validate=True)
     def post(self):
         treino = TreinoModel()
         for key, value in self.api.payload.items():
@@ -67,8 +67,7 @@ class Treino(Resource):
             return exception.args[0], 400
 
     @treino.doc('put treino')
-    @treino.expect(treino_model)
-    @treino.marshal_with(treino_model_response, 200)
+    @treino.expect(treino_model, validate=True)
     def put(self):
         try:
             db.session.query(TreinoModel).filter(TreinoModel.id == self.api.payload.get('id')). \
