@@ -33,7 +33,7 @@ def validate_form_input(func):
                     return 'Invalid Input', 400
                 if ('data' in key or 'dias' in key) and re.match(REGEX_DATA, value) is None:
                     return 'Invalid Input', 400
-                if 'email' in key and '@' in value:
+                if 'email' in key and not '@' in value:
                     return 'Invalid Input', 400
     return wrapper_func
 

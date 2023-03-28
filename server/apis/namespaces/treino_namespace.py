@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource, fields, reqparse, abort
 
 from server import db
-from server.apis.models.treino_model import TreinoModel
+from server.apis.models.treino_model import TreinoModel, ViewTreinoModel
 from server.utils.converter_data import ConverterData
 
 treino = Namespace('treino')
@@ -19,22 +19,16 @@ treino_model = treino.model('Treino', {
 
 treino_model_response = treino.model('TreinoResponse', {
     'id': fields.Integer(required=True),
-    'cpf_usuario': fields.String(required=True),
+    'nome_cliente': fields.String(required=True),
     'nome_exercicio': fields.String(required=True),
-    'series': fields.Integer(required=True),
+    'tipo_exercicio': fields.String(required=True),
     'repeticoes': fields.Integer(required=True),
-    'data_fim': fields.DateTime(required=True),
-    'modalidade': fields.Integer(required=True),
     'frequencia': fields.Integer(required=True),
-    'carga': fields.Integer(required=True),
-    'created_at': fields.DateTime,
-    'updated_at': fields.DateTime,
-    'created_by': fields.String,
-    'updated_by': fields.String
+    'carga': fields.Integer(required=True)
 })
 
 parser = reqparse.RequestParser()
-parser.add_argument('cpf_usuario')
+parser.add_argument('id')
 
 
 @treino.route('')
@@ -46,9 +40,9 @@ class Treino(Resource):
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(TreinoModel).filter_by(**params)
+            data = db.session.query(ViewTreinoModel).filter_by(**params)
         else:
-            data = db.session.query(TreinoModel).one()
+            data = db.session.query(ViewTreinoModel).one()
         if data:
             return ConverterData.converter_data_json(data=data)
         return {'message': 'Cant find project'}, 404

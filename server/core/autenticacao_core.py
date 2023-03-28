@@ -24,6 +24,7 @@ class AutenticacaoCore:
     def autenticacao(administrador):
         administrador['exp'] = datetime.datetime.now() + datetime.timedelta(hours=12)
         token = jwt.encode(administrador, environment.secret_key)
+        administrador['exp'] = str(administrador['exp'])
         return token
 
 def token_required():
