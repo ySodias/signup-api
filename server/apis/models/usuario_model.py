@@ -1,5 +1,6 @@
 import datetime
 from sqlalchemy import DateTime, Boolean, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 from server import db
 from server.apis.models.dominio_model import DominioModel
@@ -21,3 +22,4 @@ class UsuarioModel(db.Model):
     updated_at = db.Column(DateTime, default=datetime.datetime.utcnow())
     created_by = db.Column(String)
     updated_by = db.Column(String)
+

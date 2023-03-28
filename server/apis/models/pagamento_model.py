@@ -1,8 +1,7 @@
 import datetime
 
 from sqlalchemy import DateTime, Integer, String, ForeignKey, BigInteger
-
-
+from sqlalchemy.orm import relationship
 
 from server import db
 from server.apis.models.dominio_model import DominioModel
@@ -21,3 +20,14 @@ class PagamentoModel(db.Model):
     updated_at = db.Column(DateTime, default=datetime.datetime.utcnow())
     created_by = db.Column(String)
     updated_by = db.Column(String)
+
+class ViewPagamentoMoel(db.Model):
+    __tablename__ = 'vw_pagamento'
+
+    id = db.Column(Integer, primary_key=True, nullable=False)
+    nome = db.Column(String)
+    estado_matricula = db.Column(String)
+    cadastrado_em = db.Column(DateTime)
+    status_matricula = db.Column(String)
+    ultima_mensalidade_paga = db.Column(DateTime)
+    vencimento_mensalidade = db.Column(DateTime)

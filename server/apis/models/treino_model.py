@@ -23,3 +23,14 @@ class TreinoModel(db.Model):
     updated_at = db.Column(DateTime, default=datetime.datetime.utcnow())
     created_by = db.Column(String)
     updated_by = db.Column(String)
+
+class ViewTreinoModel(db.Model):
+    __tablename__ = 'vw_treino'
+
+    id = db.Column(Integer, primary_key=True, nullable=False)
+    nome_cliente = db.Column(String)
+    nome_exercicio = db.Column(String)
+    tipo_exercicio = db.Column(String)
+    repeticoes = db.Column(Integer)
+    carga = db.Column(String)
+    frequencia = db.Column(Integer)

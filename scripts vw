@@ -1,0 +1,27 @@
+-- public.vw_pagamento source
+
+CREATE OR REPLACE VIEW public.vw_pagamento
+AS SELECT tu.id,
+    tu.nome_cliente AS nome,
+    tu.ativo AS estado_matricula,
+    tu.created_at AS cadastrado_em,
+        CASE
+            WHEN tp.data_vencimento::timestamp without time zone < tp.updated_at THEN 'PENDENTE'::text
+            ELSE 'ATIVA'::text
+        END AS status_matricula,
+    tp.updated_at AS ultima_mensalidade_paga,
+    tp.data_vencimento AS vencimento_mensalidade
+   FROM tb_pagamento tp
+     JOIN tb_usuario tu ON tp.cpf_usuario::text = tu.cpf::text;
+
+CREATE OR REPLACE VIEW public.vw_treino
+AS SELECT tu.id,
+    tt.nome_exercicio,
+    td.nome_dominio AS tipo_exercicio,
+    tt.repeticoes,
+    tt.carga,
+    tt.frequencia,
+    tu.nome_cliente
+   FROM tb_treino tt
+     JOIN tb_usuario tu ON tt.cpf_usuario::text = tu.cpf::text
+     JOIN tb_dominio td ON tt.modalidade = td.id;

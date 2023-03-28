@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
-from server.apis.models.pagamento_model import PagamentoModel
+from server.apis.models.pagamento_model import PagamentoModel, ViewPagamentoMoel
+from server.apis.models.usuario_model import UsuarioModel
 from server.utils.converter_data import ConverterData
 
 listar_pagamentos = Namespace('listar_pagamentos')
@@ -26,17 +27,37 @@ pagamento_model_response = pagamento.model('PagamentoResponse', {
     'updated_by': fields.String
 })
 
+vw_pagamento_model_response = pagamento.model('VWPagamentoResponse', {
+    'id': fields.Integer(required=True),
+    'nome': fields.String(required=True),
+    'cadastrado_em': fields.String(required=True),
+    'status_matricula': fields.String(required=True),
+    'vencimento_mensalidade': fields.String(required=True),
+    'estado_matricula': fields.Boolean(required=True),
+    'ultima_mensalidade_paga': fields.String(required=True)
+})
+
 parser = reqparse.RequestParser()
 parser.add_argument('cpf_usuario')
+
+ativo_parser = reqparse.RequestParser()
+ativo_parser.add_argument('estado_matricula')
 
 @listar_pagamentos.route('')
 class Lista_Pagamentos(Resource):
 
     @listar_pagamentos.doc('get pagamentos')
-    @listar_pagamentos.marshal_with(pagamento_model_response, code=200, as_list=True)
+    @listar_pagamentos.param('estado_matricula')
+    @listar_pagamentos.expect(ativo_parser)
+    @listar_pagamentos.marshal_list_with(vw_pagamento_model_response)
     def get(self):
-        list_data = db.session.query(PagamentoModel).all()
-        response = ConverterData.paginate_json(list_data)
+        params = {key: value for key, value in ativo_parser.parse_args().items() if value}
+        if params:
+
+            list_data = db.session.query(ViewPagamentoMoel).filter_by(**params)
+        else:
+            list_data = db.session.query(ViewPagamentoMoel).all()
+        response = ConverterData.data_to_json_list(list_data)
         return response
 
 @pagamento.route('/usuario')
@@ -56,7 +77,6 @@ class Pagamento(Resource):
 
     @pagamento.doc('post pagamentos')
     @pagamento.expect(pagamento_model, validate=True)
-    @pagamento.marshal_with(pagamento_model_response, 201)
     def post(self):
         pagamento = PagamentoModel()
         for key, value in self.api.payload.items():

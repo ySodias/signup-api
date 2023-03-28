@@ -1,3 +1,5 @@
+from flask import Flask
+from flask_cors import CORS
 from flask import Flask, Blueprint
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -15,4 +17,5 @@ api = Api(
 )
 db = SQLAlchemy()
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = environment.database_connection

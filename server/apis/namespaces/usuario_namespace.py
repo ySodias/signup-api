@@ -40,6 +40,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('nome_cliente')
 parser.add_argument('cpf')
 parser.add_argument('ativo')
+parser.add_argument('id')
 
 @listar_usuarios.route('')
 class Listar_Usuarios(Resource):
