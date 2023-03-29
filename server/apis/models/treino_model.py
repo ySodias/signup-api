@@ -34,3 +34,5 @@ class ViewTreinoModel(db.Model):
     repeticoes = db.Column(Integer)
     carga = db.Column(String)
     frequencia = db.Column(Integer)
+    data_inicio = db.Column(String)
+    data_troca = db.Column(String)

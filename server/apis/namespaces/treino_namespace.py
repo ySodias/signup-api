@@ -24,7 +24,9 @@ treino_model_response = treino.model('TreinoResponse', {
     'tipo_exercicio': fields.String(required=True),
     'repeticoes': fields.Integer(required=True),
     'frequencia': fields.Integer(required=True),
-    'carga': fields.Integer(required=True)
+    'carga': fields.Integer(required=True),
+    'data_inicio': fields.String(required=True),
+    'data_troca': fields.String(required=True)
 })
 
 parser = reqparse.RequestParser()
@@ -44,7 +46,7 @@ class Treino(Resource):
         else:
             data = db.session.query(ViewTreinoModel).one()
         if data:
-            return ConverterData.converter_data_json(data=data)
+            return ConverterData.converter_data_json(data=data[0])
         return {'message': 'Cant find project'}, 404
 
     @treino.doc('post treino')
