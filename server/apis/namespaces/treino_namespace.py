@@ -30,23 +30,22 @@ treino_model_response = treino.model('TreinoResponse', {
 })
 
 parser = reqparse.RequestParser()
-parser.add_argument('id')
+parser.add_argument('nome_cliente')
 
 
 @treino.route('')
 class Treino(Resource):
 
-    @treino.param('cpf_usuario')
+    @treino.param('nome_cliente')
     @treino.expect(parser)
-    @treino.marshal_with(treino_model_response, 200)
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(ViewTreinoModel).filter_by(**params)
+            data = db.session.query(ViewTreinoModel).filter_by(**params).all()
         else:
             data = db.session.query(ViewTreinoModel).one()
         if data:
-            return ConverterData.converter_data_json(data=data[0])
+            return [ConverterData.converter_data_json(data=d) for d in data]
         return {'message': 'Cant find project'}, 404
 
     @treino.doc('post treino')
