@@ -1,3 +1,4 @@
+from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse, abort
 
 from server import db
@@ -56,6 +57,7 @@ class Treino(Resource):
             setattr(treino, key, value)
         db.session.add(treino)
         try:
+            treino.created_by = g.user
             db.session.commit()
             return 'create with sucess', 201
         except Exception as exception:

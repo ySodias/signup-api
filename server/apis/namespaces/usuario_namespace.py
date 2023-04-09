@@ -1,3 +1,4 @@
+from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
@@ -81,6 +82,7 @@ class Usuario(Resource):
             setattr(usuario, key, value)
         db.session.add(usuario)
         try:
+            usuario.created_by = g.user
             db.session.commit()
             return 'create with sucess', 201
         except Exception as exception:

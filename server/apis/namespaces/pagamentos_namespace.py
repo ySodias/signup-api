@@ -1,3 +1,4 @@
+from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
@@ -9,6 +10,7 @@ listar_pagamentos = Namespace('listar_pagamentos')
 pagamento = Namespace('pagamento')
 
 pagamento_model = pagamento.model('Pagamento', {
+    'id': fields.Integer(required=True),
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),
@@ -81,6 +83,7 @@ class Pagamento(Resource):
         pagamento = PagamentoModel()
         for key, value in self.api.payload.items():
             setattr(pagamento, key, value)
+            pagamento.created_by = g.user
         db.session.add(pagamento)
         try:
             db.session.commit()
@@ -90,7 +93,6 @@ class Pagamento(Resource):
 
     @pagamento.doc('post pagamentos')
     @pagamento.expect(pagamento_model, validate=True)
-    @pagamento.marshal_with(pagamento_model_response, 200)
     def put(self):
         try:
             db.session.query(PagamentoModel).filter(
