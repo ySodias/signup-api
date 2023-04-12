@@ -10,7 +10,7 @@ listar_pagamentos = Namespace('listar_pagamentos')
 pagamento = Namespace('pagamento')
 
 pagamento_model = pagamento.model('Pagamento', {
-    'id': fields.Integer(required=True),
+    'id': fields.Integer,
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),
@@ -97,8 +97,9 @@ class Pagamento(Resource):
         try:
             db.session.query(PagamentoModel).filter(
                 PagamentoModel.id == self.api.payload.get('id')). \
-                update(self.api.payload, synchronize_session=False)
+                update(self.api.payload)
             db.session.commit()
+            db.session.close()
             return 'update with sucess', 200
         except Exception as exception:
             return exception.args[0], 400

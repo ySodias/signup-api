@@ -59,6 +59,7 @@ class Treino(Resource):
         try:
             treino.created_by = g.user
             db.session.commit()
+            db.session.close()
             return 'create with sucess', 201
         except Exception as exception:
             return exception.args[0], 400
@@ -70,6 +71,7 @@ class Treino(Resource):
             db.session.query(TreinoModel).filter(TreinoModel.id == self.api.payload.get('id')). \
                 update(self.api.payload, synchronize_session=False)
             db.session.commit()
+            db.session.close()
             return 'update with sucess', 200
         except Exception as exception:
             return exception.args[0], 400

@@ -35,19 +35,21 @@ def validate_form_input():
                 return 'Invalid Input', 400
             if 'email' in key and not '@' in value:
                 return 'Invalid Input', 400
-        request.json['updated_at'] = datetime.datetime.now()
+        request.json['updated_at'] = str(datetime.datetime.now())
         request.json['updated_by'] = g.user
 
 def validate_request(func):
     @functools.wraps(func)
     def wrapper_func():
-        if request.method != 'OPTIONS' and request.path !='/v1/autenticacao':
+        path = request.path
+        if request.method != 'OPTIONS' and path not in ALLOWED_URLS:
             usuario_logado = token_required()
             g.user = usuario_logado.get('email')
-            path = request.path
-            if isinstance(usuario_logado, tuple) and path not in ALLOWED_URLS:
+            if isinstance(usuario_logado, tuple):
                 return 'Não autorizado', 401
-            validate_form_input()
+            form = validate_form_input()
+            if form != None:
+                return 'Invalid Input', 400
     return wrapper_func
 
 @app.before_request
