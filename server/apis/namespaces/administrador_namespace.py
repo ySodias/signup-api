@@ -18,6 +18,7 @@ administrador_model = administrador.model('Administrador', {
     'endereco': fields.String(required=True),
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
+    'nivel_permissao': fields.Integer
 })
 
 administrador_model_response = administrador.model('AdministradorResponse', {
@@ -28,6 +29,7 @@ administrador_model_response = administrador.model('AdministradorResponse', {
     'endereco': fields.String(required=True),
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
+    'nivel_permissao': fields.Integer
 })
 
 parser = reqparse.RequestParser()

@@ -13,25 +13,13 @@ treino_model = treino.model('Treino', {
     'series': fields.Integer(required=True),
     'repeticoes': fields.Integer(required=True),
     'data_fim': fields.String(required=True),
-    'modalidade': fields.Integer(required=True),
     'frequencia': fields.Integer(required=True),
     'carga': fields.Integer(required=True)
 })
 
-treino_model_response = treino.model('TreinoResponse', {
-    'id': fields.Integer(required=True),
-    'nome_cliente': fields.String(required=True),
-    'nome_exercicio': fields.String(required=True),
-    'tipo_exercicio': fields.String(required=True),
-    'repeticoes': fields.Integer(required=True),
-    'frequencia': fields.Integer(required=True),
-    'carga': fields.Integer(required=True),
-    'data_inicio': fields.String(required=True),
-    'data_troca': fields.String(required=True)
-})
-
 parser = reqparse.RequestParser()
 parser.add_argument('nome_cliente')
+parser.add_argument('id')
 
 
 @treino.route('')

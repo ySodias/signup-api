@@ -16,7 +16,6 @@ class TreinoModel(db.Model):
     series = db.Column(Integer, nullable=False)
     repeticoes = db.Column(Integer, nullable=False)
     data_fim = db.Column(String, nullable=False)
-    modalidade = db.Column(Integer, ForeignKey(DominioModel.id), nullable=False)
     frequencia = db.Column(Integer, nullable=False)
     carga = db.Column(Integer, nullable=False)
     created_at = db.Column(DateTime, default=datetime.datetime.utcnow())# data_inicio
@@ -30,9 +29,9 @@ class ViewTreinoModel(db.Model):
     id = db.Column(Integer, primary_key=True, nullable=False)
     nome_cliente = db.Column(String)
     nome_exercicio = db.Column(String)
-    tipo_exercicio = db.Column(String)
     repeticoes = db.Column(Integer)
     carga = db.Column(String)
     frequencia = db.Column(Integer)
     data_inicio = db.Column(String)
     data_troca = db.Column(String)
+    series = db.Column(Integer)

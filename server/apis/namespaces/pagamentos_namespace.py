@@ -1,5 +1,6 @@
 from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse
+from sqlalchemy import desc
 
 from server import db
 from server.apis.models.pagamento_model import PagamentoModel, ViewPagamentoMoel
@@ -36,7 +37,8 @@ vw_pagamento_model_response = pagamento.model('VWPagamentoResponse', {
     'status_matricula': fields.String(required=True),
     'vencimento_mensalidade': fields.String(required=True),
     'estado_matricula': fields.Boolean(required=True),
-    'ultima_mensalidade_paga': fields.String(required=True)
+    'ultima_mensalidade_paga': fields.String(required=True),
+    'valor': fields.String(required=True)
 })
 
 parser = reqparse.RequestParser()
@@ -71,7 +73,7 @@ class Pagamento(Resource):
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(PagamentoModel).filter_by(**params)
+            data = db.session.query(PagamentoModel).filter_by(**params).order_by(desc(PagamentoModel.data_vencimento))
         else:
             data = db.session.query(PagamentoModel).all()
         response = ConverterData.converter_data_json(data=data[0])

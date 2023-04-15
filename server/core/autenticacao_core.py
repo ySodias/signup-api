@@ -12,9 +12,7 @@ class AutenticacaoCore:
     @staticmethod
     def get_administrador_por_usuario(autenticacao_model: dict):
         try:
-            data = db.session.query(AdministradorModel).filter(
-                AdministradorModel.email == autenticacao_model['email']
-            ).one()
+            data = db.session.query(AdministradorModel).filter_by(**autenticacao_model).one()
             response = ConverterData.converter_data_json(data=data)
             return response
         except:
@@ -33,6 +31,7 @@ def token_required():
         return 'Não autorizado', 401
     try:
         data = jwt.decode(token, environment.secret_key, algorithms=['HS256'])
+        del data['exp']
         current_user = AutenticacaoCore.get_administrador_por_usuario(autenticacao_model=data)
     except:
         return 'Não autorizado', 401
