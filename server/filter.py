@@ -55,12 +55,11 @@ def validate_request(func):
 @app.before_request
 @validate_request
 def before_request_func():
+    print(datetime.datetime.now())
     return
 
 
 @app.after_request
 def after_request_func(response):
+    print(datetime.datetime.now())
     return response
-
-def make_registers_time_and_user_in_database():
-    pass

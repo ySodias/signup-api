@@ -24,6 +24,7 @@ administrador_model = administrador.model('Administrador', {
 administrador_model_response = administrador.model('AdministradorResponse', {
     'id': fields.Integer,
     'nome': fields.String(required=True),
+    'password': fields.String(required=True),
     'email': fields.String(required=True),
     'data_nascimento': fields.String(required=True),
     'endereco': fields.String(required=True),
@@ -46,9 +47,9 @@ class Administrador(Resource):
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            usuarios = db.session.query(UsuarioModel).filter_by(**params)
+            usuarios = db.session.query(AdministradorModel).filter_by(**params)
         else:
-            usuarios = db.session.query(UsuarioModel).all()
+            usuarios = db.session.query(AdministradorModel).all()
         response = list()
         for usuario in usuarios:
             response.append(ConverterData.converter_data_json(data=usuario).copy())
