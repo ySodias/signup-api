@@ -1,4 +1,6 @@
+from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse
+from sqlalchemy import desc
 
 from server import db
 from server.apis.models.pagamento_model import PagamentoModel, ViewPagamentoMoel
@@ -9,6 +11,7 @@ listar_pagamentos = Namespace('listar_pagamentos')
 pagamento = Namespace('pagamento')
 
 pagamento_model = pagamento.model('Pagamento', {
+    'id': fields.Integer,
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),
@@ -34,7 +37,8 @@ vw_pagamento_model_response = pagamento.model('VWPagamentoResponse', {
     'status_matricula': fields.String(required=True),
     'vencimento_mensalidade': fields.String(required=True),
     'estado_matricula': fields.Boolean(required=True),
-    'ultima_mensalidade_paga': fields.String(required=True)
+    'ultima_mensalidade_paga': fields.String(required=True),
+    'valor': fields.String(required=True)
 })
 
 parser = reqparse.RequestParser()
@@ -69,7 +73,7 @@ class Pagamento(Resource):
     def get(self):
         params = {key: value for key, value in parser.parse_args().items() if value}
         if params:
-            data = db.session.query(PagamentoModel).filter_by(**params)
+            data = db.session.query(PagamentoModel).filter_by(**params).order_by(desc(PagamentoModel.data_vencimento))
         else:
             data = db.session.query(PagamentoModel).all()
         response = ConverterData.converter_data_json(data=data[0])
@@ -81,6 +85,7 @@ class Pagamento(Resource):
         pagamento = PagamentoModel()
         for key, value in self.api.payload.items():
             setattr(pagamento, key, value)
+            pagamento.created_by = g.user
         db.session.add(pagamento)
         try:
             db.session.commit()
@@ -90,13 +95,13 @@ class Pagamento(Resource):
 
     @pagamento.doc('post pagamentos')
     @pagamento.expect(pagamento_model, validate=True)
-    @pagamento.marshal_with(pagamento_model_response, 200)
     def put(self):
         try:
             db.session.query(PagamentoModel).filter(
                 PagamentoModel.id == self.api.payload.get('id')). \
-                update(self.api.payload, synchronize_session=False)
+                update(self.api.payload)
             db.session.commit()
+            db.session.close()
             return 'update with sucess', 200
         except Exception as exception:
             return exception.args[0], 400

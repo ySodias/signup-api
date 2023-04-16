@@ -1,3 +1,4 @@
+from flask import g
 from flask_restx import Namespace, Resource, fields, reqparse
 
 from server import db
@@ -51,7 +52,9 @@ class PoliticaPagamento(Resource):
             setattr(politica_pagamento, key, value)
         db.session.add(politica_pagamento)
         try:
+            politica_pagamento.created_by = g.user
             db.session.commit()
+            db.session.close()
             return 'create with sucess', 201
         except Exception as exception:
             return exception.args[0], 400
@@ -64,6 +67,7 @@ class PoliticaPagamento(Resource):
             db.session.query(PoliticasPagamentosModel).filter(PoliticasPagamentosModel.id == self.api.payload.get('id')). \
                 update(self.api.payload, synchronize_session=False)
             db.session.commit()
+            db.session.close()
             return 'update with sucess', 200
         except Exception as exception:
             return exception.args[0], 400

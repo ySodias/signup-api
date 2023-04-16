@@ -1,5 +1,6 @@
 from flask_restx import Resource
 
+from server.apis.namespaces.administrador_namespace import administrador
 from server.apis.namespaces.autenticacao_namespace import autenticacao
 from server.apis.namespaces.dashboards_namespace import dashboards
 from server.apis.namespaces.pagamentos_namespace import pagamento, listar_pagamentos
@@ -24,6 +25,7 @@ class Main(Resource):
         api.add_namespace(politica_pagamento)
         api.add_namespace(autenticacao)
         api.add_namespace(dashboards)
+        api.add_namespace(administrador)
 
     def run(self):
         self.add_namepaces()

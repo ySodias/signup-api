@@ -15,6 +15,7 @@ autenticacao_model_reponse = autenticacao.model('AutenticacaoResponse', {
     'endereco': fields.String(required=True),
     'telefone': fields.String(required=True),
     'ativo': fields.Boolean(required=True),
+    'nivel_permissao': fields.Integer(required=True),
     'token': fields.String(required=True),
 })
 
