@@ -14,7 +14,7 @@ class Dashboards(Resource):
     @dashboards.doc('get dashboards')
     @dashboards.marshal_with(dashboards_model_response, 200)
     def post(self):
-        url = environment.microsoft_url
+        url = 'https://login.microsoftonline.com/common/oauth2/token'
         headers = {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Cookie': 'fpc=Ar9JAx08weZOsOREf4rEufI_8lkqAQAAAJws5NkOAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
