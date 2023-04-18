@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 import requests
+import logging
 from server import environment
 
 dashboards = Namespace('dashboards')
@@ -21,5 +22,6 @@ class Dashboards(Resource):
         }
         payload='grant_type=password&scope=openid&resource=https%3A%2F%2Fanalysis.windows.net%2Fpowerbi%2Fapi&client_id=b142d4c6-0f74-4114-87db-875079893e26&username=yuri.soares2%40fatec.sp.gov.br&password=Qxwc1357!'
         response = requests.post(url, headers=headers, data=payload)
-        print(response)
+        logging.warning(response.status_code)
+        logging.warning(response.json())
         return {'token': response.json().get('access_token')}
