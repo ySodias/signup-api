@@ -15,7 +15,6 @@ pagamento_model = pagamento.model('Pagamento', {
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.Integer(required=True),
-    'valor_pagamento': fields.Integer(required=True)
 })
 
 pagamento_model_response = pagamento.model('PagamentoResponse', {
@@ -23,7 +22,6 @@ pagamento_model_response = pagamento.model('PagamentoResponse', {
     'cpf_usuario': fields.String(required=True),
     'data_vencimento': fields.String(required=True),
     'forma_pagamento': fields.String(required=True),
-    'valor_pagamento': fields.String(required=True),
     'created_at': fields.String,
     'updated_at': fields.String,
     'created_by': fields.String,
