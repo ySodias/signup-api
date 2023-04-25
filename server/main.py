@@ -3,7 +3,6 @@ from flask_restx import Resource
 from server.apis.namespaces.administrador_namespace import administrador
 from server.apis.namespaces.autenticacao_namespace import autenticacao
 from server.apis.namespaces.pagamentos_namespace import pagamento, listar_pagamentos
-from server.apis.namespaces.politica_pagamento_namespace import politica_pagamento
 from server.apis.namespaces.treino_namespace import treino
 from server.apis.namespaces.usuario_namespace import usuario, listar_usuarios
 from server import app, api_blueprint, api, environment, db
@@ -21,7 +20,6 @@ class Main(Resource):
         api.add_namespace(treino)
         api.add_namespace(listar_pagamentos)
         api.add_namespace(pagamento)
-        api.add_namespace(politica_pagamento)
         api.add_namespace(autenticacao)
         api.add_namespace(administrador)
 
