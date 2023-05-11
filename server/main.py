@@ -28,6 +28,7 @@ class Main(Resource):
         db.init_app(app)
         app.run(port=environment.port, host=environment.host, debug=environment.debug)
 
+
 if __name__ == '__main__':
     Main().run()
 
