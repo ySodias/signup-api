@@ -29,6 +29,7 @@ class Environment:
 
     @property
     def database_connection(self) -> str:
+        self._ENV_DATABASE_CONNECTION = self._ENV_DATABASE_CONNECTION.replace("postgres://", "postgresql://")
         return self._ENV_DATABASE_CONNECTION
 
     @property
