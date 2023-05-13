@@ -18,4 +18,4 @@ api = Api(
 db = SQLAlchemy()
 app = Flask(__name__)
 CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://signup:6BWdGl0r21q5TQYxGsn33bgWZ46r5ptr@dpg-cgu0l9aut4mcfrg3teig-a/db_signup_i5l3"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://signup:6BWdGl0r21q5TQYxGsn33bgWZ46r5ptr@dpg-cgu0l9aut4mcfrg3teig-a.oregon-postgres.render.com/db_signup_i5l3"

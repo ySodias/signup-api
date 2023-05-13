@@ -6,7 +6,8 @@ from server.apis.namespaces.pagamentos_namespace import pagamento, listar_pagame
 from server.apis.namespaces.treino_namespace import treino
 from server.apis.namespaces.usuario_namespace import usuario, listar_usuarios
 from server import app, api_blueprint, api, environment, db
-
+#Não remover esse import
+from server.filter import before_request_func, after_request_func
 
 class Main(Resource):
 
