@@ -9,6 +9,7 @@ class Environment:
         self._ENV_HOST = os.getenv('HOST') or 'localhost'
         self._ENV_DEBUG = os.getenv('DEBUG') or False
         self._ENV_DATABASE_CONNECTION = os.getenv('DATABASE_CONNECTION')
+        self._SECRET_KEY = os.getenv('SECRET_KEY')
 
     @property
     def api_name(self) -> str:
@@ -31,5 +32,5 @@ class Environment:
         return self._ENV_DATABASE_CONNECTION
 
     @property
-    def secret(self) -> str:
-        return self._ENV_SECRET
+    def secret_key(self) -> str:
+        return self._SECRET_KEY
